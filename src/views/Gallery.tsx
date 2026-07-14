@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { X } from 'lucide-react';
 import { gallery, GalleryImage } from '../data/gallery';
@@ -20,26 +21,37 @@ export default function Gallery() {
     return s ? `Session ${s.sessionNumber}: ${s.title}` : 'Unknown Session';
   };
 
+  // Lock page scroll while modal is open, so the modal can't drift with page scroll
+  useEffect(() => {
+    if (selectedImage) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [selectedImage]);
+
   return (
     <div className="min-h-screen bg-darker py-20 px-4 md:px-12 lg:px-24 relative">
       <div className="max-w-7xl mx-auto mb-16 flex flex-col md:flex-row justify-between items-end gap-8">
         <div>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="font-display text-5xl md:text-8xl font-bold uppercase tracking-tighter text-white mb-6"
           >
-            Visual <span className="text-primary">Archive</span>
+            Визуальный <span className="text-primary">Архив</span>
           </motion.h1>
           <p className="font-serif italic text-gray-400 text-xl md:text-2xl">
-            Fragments of memory, frozen in time.
+            Фрагменты истории, запечатленные в памяти.
           </p>
         </div>
 
         {/* Filter Indicator */}
         <AnimatePresence>
           {activeFilter && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
@@ -48,7 +60,7 @@ export default function Gallery() {
               <span className="font-mono text-xs uppercase tracking-widest text-gray-300">
                 Filtering: <span className="text-primary font-bold">{getCharName(activeFilter)}</span>
               </span>
-              <button 
+              <button
                 onClick={() => setActiveFilter(null)}
                 className="text-gray-400 hover:text-white transition-colors"
               >
@@ -62,13 +74,13 @@ export default function Gallery() {
       <motion.div layout className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <AnimatePresence>
           {filteredGallery.map((img) => (
-            <motion.div 
+            <motion.div
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
-              key={img.id} 
+              key={img.id}
               className="relative group cursor-pointer aspect-square overflow-hidden border border-gray-dark hover:border-primary transition-colors"
               onClick={() => setSelectedImage(img)}
             >
@@ -79,49 +91,72 @@ export default function Gallery() {
         </AnimatePresence>
       </motion.div>
 
-      {/* Popup Modal */}
-      <AnimatePresence>
-        {selectedImage && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12 bg-black/90 backdrop-blur-md"
-            onClick={() => setSelectedImage(null)}
-          >
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative max-w-5xl w-full flex flex-col md:flex-row bg-darker border border-gray-dark shadow-2xl"
-              onClick={e => e.stopPropagation()}
+      {/* Popup Modal — rendered via portal directly into document.body so it is
+          always positioned relative to the real viewport, never affected by
+          any parent's transform/filter/will-change (which would otherwise
+          turn `position: fixed` into something that scrolls with the page). */}
+      {createPortal(
+        <AnimatePresence>
+          {selectedImage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 999999,
+              }}
+              className="flex items-center justify-center p-2 md:p-6 bg-black/95 backdrop-blur-md"
+              onClick={() => setSelectedImage(null)}
             >
-              <button 
-                className="absolute top-4 right-4 z-50 p-2 bg-darker/50 hover:bg-primary text-white transition-colors border border-gray-dark hover:border-primary"
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  maxWidth: '98vw',
+                  maxHeight: '96vh',
+                }}
+                className="relative flex items-center justify-center"
                 onClick={() => setSelectedImage(null)}
               >
-                <X size={24} />
-              </button>
-              
-              <div className="w-full md:w-2/3 max-h-[70vh] md:max-h-[85vh] bg-black flex items-center justify-center">
-                <img src={selectedImage.url} alt={selectedImage.caption} className="w-full h-full object-contain" />
-              </div>
+                <button
+                  className="absolute top-2 right-2 md:top-4 md:right-4 z-50 p-2 bg-darker/60 hover:bg-primary text-white transition-colors border border-gray-dark hover:border-primary"
+                  onClick={() => setSelectedImage(null)}
+                >
+                  <X size={28} />
+                </button>
 
-              <div className="w-full md:w-1/3 p-8 flex flex-col justify-center">
-                
-                {selectedImage.sessionId && (
-                  <div className="font-mono text-xs tracking-widest text-primary uppercase mb-4 pb-4 border-b border-gray-dark">
-                    {getSessionTitle(selectedImage.sessionId)}
-                  </div>
-                )}
-                
-                <p className="font-serif text-lg md:text-xl text-gray-200 mb-12 italic">
-                  "{selectedImage.caption}"
-                </p>
+                <img
+                  src={selectedImage.url}
+                  alt={selectedImage.caption}
+                  className="max-w-full max-h-full w-auto h-auto object-contain select-none"
+                  onClick={e => e.stopPropagation()}
+                  draggable={false}
+                />
 
-                {selectedImage.characters.length > 0 && (
-                  <div>
-                    <div className="font-mono text-xs tracking-widest text-gray-500 uppercase mb-3">Subjects Identified:</div>
+                {/* Overlay caption / info panel */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-6 md:p-10 pt-16"
+                  onClick={e => e.stopPropagation()}
+                >
+                  {selectedImage.sessionId && (
+                    <div className="font-mono text-xs tracking-widest text-primary uppercase mb-3">
+                      {getSessionTitle(selectedImage.sessionId)}
+                    </div>
+                  )}
+
+                  <p className="font-serif text-lg md:text-2xl text-gray-100 mb-4 italic max-w-3xl">
+                    "{selectedImage.caption}"
+                  </p>
+
+                  {selectedImage.characters.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {selectedImage.characters.map(charId => (
                         <button
@@ -130,19 +165,20 @@ export default function Gallery() {
                             setActiveFilter(charId);
                             setSelectedImage(null);
                           }}
-                          className="px-3 py-1 border border-gray-light/30 text-gray-300 font-mono text-xs uppercase tracking-widest hover:border-primary hover:text-primary transition-colors"
+                          className="px-3 py-1 border border-gray-light/40 bg-black/40 text-gray-200 font-mono text-xs uppercase tracking-widest hover:border-primary hover:text-primary transition-colors"
                         >
                           {getCharName(charId)}
                         </button>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }

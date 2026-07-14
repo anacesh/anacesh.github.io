@@ -12,7 +12,7 @@ export default function Layout() {
     { name: 'ГЛАВНАЯ', path: '/', icon: <Home size={24} /> },
     { name: 'ГЕРОИ', path: '/characters', icon: <Users size={24} /> },
     { name: 'ХРОНИКИ', path: '/timeline', icon: <Clock size={24} /> },
-    { name: 'АРХИВ', path: '/gallery', icon: <ImageIcon size={24} /> },
+    { name: 'ГАЛЕРЕЯ', path: '/gallery', icon: <ImageIcon size={24} /> },
     { name: 'ЛОР', path: '/lore', icon: <Book size={24} /> },
   ];
 

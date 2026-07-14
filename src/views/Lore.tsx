@@ -50,7 +50,7 @@ export default function Lore() {
             animate={{ opacity: 1, x: 0 }}
             className="font-display text-5xl md:text-8xl font-bold uppercase tracking-tighter text-white mb-6"
           >
-            Архив <span className="text-primary">Мира</span>
+            Галерея <span className="text-primary">Мира</span>
           </motion.h1>
           <p className="font-serif italic text-gray-400 text-xl md:text-2xl">
             Знания, собранные по крупицам в умирающем мире.

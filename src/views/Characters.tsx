@@ -19,7 +19,7 @@ export default function Characters() {
           animate={{ opacity: 1, x: 0 }}
           className="font-display text-5xl md:text-8xl font-bold uppercase tracking-tighter text-white mb-6"
         >
-          Dramatis <br/> <span className="text-primary">Personae</span>
+          Отважные <br/> <span className="text-primary">Авантюристы</span>
         </motion.h1>
         <p className="font-serif italic text-gray-400 text-xl md:text-2xl max-w-2xl">
           Странствующие души, чьи судьбы брошены на алтарь случая.
