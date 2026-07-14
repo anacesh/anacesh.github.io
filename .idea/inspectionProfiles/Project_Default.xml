@@ -1,0 +1,25 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="PyQt6" />
+          <option value="fastapi" />
+          <option value="uvicorn" />
+          <option value="websockets" />
+          <option value="httpx" />
+          <option value="openai" />
+          <option value="chromadb" />
+          <option value="numpy" />
+          <option value="pydantic" />
+          <option value="aiofiles" />
+          <option value="asyncio" />
+          <option value="tiktoken" />
+          <option value="Pillow" />
+          <option value="python-multipart" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
