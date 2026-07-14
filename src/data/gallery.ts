@@ -6,6 +6,11 @@ import mortHalidWork from '../assets/images/mort_i_halid_za_rabotoy.png';
 import mortExaminesBalot from '../assets/images/mort_osvatrivaet_balota_ryadom_navstriy_v_proeme_halid.png';
 import mortDream from '../assets/images/strashniy_son_morta_pered_otpravkoy.png';
 import terminusVictorLeaveMorning from '../assets/images/terminus_and__victor_pokidaut_lavku_utrom.png';
+import tavernTalkCityRoutes from '../assets/images/tavern_talk_city_routes.png';
+import mountainPassTrackingTerminus from '../assets/images/mountain_pass_tracking_terminus.png';
+import gateIntimidationWolfgangAria from '../assets/images/gate_intimidation_wolfgang_aria.png';
+import stealthScoutingVictorTerminus from '../assets/images/stealth_scouting_victor_terminus.png';
+import workshopOintmentCheckupBalot from '../assets/images/workshop_ointment_checkup_balot.jpg';
 
 export interface GalleryImage {
   id: string;
@@ -63,7 +68,7 @@ export const gallery: GalleryImage[] = [
     url: mortDream,
     sessionId: "s1_15",
     characters: ["mort"],
-    caption: "Таинственный общий сон, связавший судьбы всех наемников перед отправкой."
+    caption: "Таинственный страшный сон Морта."
   },
   {
     id: "g8",
@@ -71,5 +76,40 @@ export const gallery: GalleryImage[] = [
     sessionId: "s1_41",
     characters: ["terminus", "victor"],
     caption: "Терминус и Виктор Корнеплод тайно покидают лавку Морта ранним утром."
-  }
+  },
+{
+    id: "g9",
+    url: tavernTalkCityRoutes,
+    sessionId: "s1_4",
+    characters: ["navstriy", "balot"],
+    caption: "Трактирщик показывает Навстрию и Балоту путь в город через Грот Охотника."
+  },
+  {
+    id: "g10",
+    url: mountainPassTrackingTerminus,
+    sessionId: "s1_7",
+    characters: ["balot", "navstriy", "terminus"],
+    caption: "Терминус бесшумно следует за Балотом и Навстрием через заснеженный горный перевал."
+  },
+  {
+    id: "g11",
+    url: gateIntimidationWolfgangAria,
+    sessionId: "s1_19",
+    characters: ["wolfgang", "aria"],
+    caption: "Вольфганг запугивает стражника у ворот Риттерсвега, пока Ария наблюдает со стороны."
+  },
+  {
+    id: "g12",
+    url: stealthScoutingVictorTerminus,
+    sessionId: "s1_23",
+    characters: ["victor", "terminus"],
+    caption: "Виктор Корнеплод и Терминус прячутся в тенях, пытаясь подслушать стражников у башни."
+  },
+  {
+    id: "g13",
+    url: workshopOintmentCheckupBalot,
+    sessionId: "s1_26",
+    characters: ["mort", "halid", "balot"],
+    caption: "Морт подтверждает рыцарям, что Балот его пациент, пока голиаф незаметно уходит за мазью."
+  },
 ];

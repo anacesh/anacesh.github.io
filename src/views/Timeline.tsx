@@ -56,18 +56,18 @@ export default function Timeline() {
 
   return (
     <div className="bg-darker flex flex-col md:flex-row h-[calc(100vh-73px)] md:h-screen mt-[73px] md:mt-0 overflow-hidden">
-      {/* Left Sidebar - Fixed */}
-      <div className="w-full md:w-80 h-[30vh] md:h-screen bg-darker z-40 border-b md:border-b-0 md:border-r border-gray-dark shrink-0 flex flex-col">
+      {/* Left Sidebar - Fixed. Widened so "ХРОНОЛОГИЯ" always fits at full size. */}
+      <div className="w-full md:w-96 lg:w-[420px] h-[30vh] md:h-screen bg-darker z-40 border-b md:border-b-0 md:border-r border-gray-dark shrink-0 flex flex-col">
         <div className="p-4 md:p-8 md:pb-4 border-b border-gray-dark shrink-0 bg-darker mt-0 md:mt-[73px]">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-display text-2xl md:text-4xl font-bold uppercase tracking-tighter text-white"
+            className="font-display text-2xl md:text-4xl font-bold uppercase tracking-tighter text-white whitespace-nowrap"
           >
             Хронология <br className="hidden md:block" /><span className="text-primary">Пути</span>
           </motion.h1>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
           {chapters.map((chapter) => {
             const chapterSessions = timeline.filter(s => s.chapter === chapter);
@@ -100,8 +100,8 @@ export default function Timeline() {
                             key={session.id}
                             onClick={() => scrollToSession(session.id)}
                             className={`text-left text-[10px] md:text-xs font-mono uppercase tracking-widest py-2 px-3 rounded transition-colors truncate ${
-                              activeSession === session.id 
-                                ? 'bg-gray-dark text-white border-l-2 border-primary -ml-[1px]' 
+                              activeSession === session.id
+                                ? 'bg-gray-dark text-white border-l-2 border-primary -ml-[1px]'
                                 : 'text-gray-500 hover:text-gray-300'
                             }`}
                           >
@@ -121,14 +121,14 @@ export default function Timeline() {
       {/* Right Content - Scrollable */}
       <div className="flex-1 h-[70vh] md:h-screen overflow-y-auto px-4 py-8 md:pt-[100px] md:pb-24 md:px-16 lg:px-24">
         <div className="max-w-5xl mx-auto relative pl-4 md:pl-8">
-          
+
           {/* Central Line */}
           <div className="absolute left-4 md:left-8 top-0 bottom-0 w-px bg-gray-dark z-0"></div>
 
           {timeline.map((session) => {
             return (
               <div id={`session-${session.id}`} key={session.id} className="relative mb-24 md:mb-32 group scroll-mt-24">
-                
+
                 {/* Node on central line */}
                 <div className={`absolute top-0 w-4 h-4 rounded-full border-4 z-20 transition-colors duration-500 ${
                   activeSession === session.id ? 'bg-primary border-darker' : 'bg-darker border-gray-500'
@@ -143,8 +143,8 @@ export default function Timeline() {
                       <span className="text-primary mr-3 inline-block">#{session.sessionNumber}</span>
                       {session.title}
                     </h3>
-                    
-                    <button 
+
+                    <button
                       onClick={() => session.locationId ? navigate('/lore', { state: { selectedLoreId: session.locationId } }) : null}
                       className={`font-mono text-xs md:text-sm tracking-widest mt-2 flex items-center gap-1 transition-colors ${
                         session.locationId ? 'text-primary hover:text-white cursor-pointer' : 'text-gray-400'
@@ -154,13 +154,13 @@ export default function Timeline() {
                       ЛОКАЦИЯ: {session.location}
                     </button>
                   </div>
-                  
+
                   <div className="text-gray-300 leading-relaxed font-sans mb-8 whitespace-pre-wrap text-base md:text-lg bg-black/20 p-6 md:p-10 rounded-xl border border-gray-dark/50 w-full text-left">
                     <LoreTooltip text={session.description} loreData={loreData} />
                   </div>
-                  
+
                   {session.imageUrl && (
-                    <div 
+                    <div
                       className="w-full relative overflow-hidden rounded-xl border border-gray-dark group-hover:border-primary/50 transition-colors cursor-pointer"
                       onClick={() => setSelectedImage(session.imageUrl)}
                     >
@@ -175,18 +175,18 @@ export default function Timeline() {
           })}
         </div>
       </div>
-      
+
       {/* Fullscreen Image Popup */}
       <AnimatePresence>
         {selectedImage && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-12 cursor-pointer"
             onClick={() => setSelectedImage(null)}
           >
-            <button 
+            <button
               className="absolute top-4 right-4 md:top-8 md:right-8 text-gray-400 hover:text-white transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
@@ -195,13 +195,13 @@ export default function Timeline() {
             >
               <X size={32} />
             </button>
-            <motion.img 
+            <motion.img
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
-              src={selectedImage} 
-              alt="Fullscreen" 
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" 
+              src={selectedImage}
+              alt="Fullscreen"
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
             />
           </motion.div>
         )}
