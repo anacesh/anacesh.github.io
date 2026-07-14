@@ -1,24 +1,23 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Home, Users, Clock, Image as ImageIcon, Book } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const location = useLocation();
 
   const navLinks = [
-    { name: 'ГЛАВНАЯ', path: '/', icon: <Home size={24} /> },
-    { name: 'ГЕРОИ', path: '/characters', icon: <Users size={24} /> },
-    { name: 'ХРОНИКИ', path: '/timeline', icon: <Clock size={24} /> },
-    { name: 'ГАЛЕРЕЯ', path: '/gallery', icon: <ImageIcon size={24} /> },
-    { name: 'ЛОР', path: '/lore', icon: <Book size={24} /> },
+    { name: 'ГЛАВНАЯ', path: '/' },
+    { name: 'ГЕРОИ', path: '/characters' },
+    { name: 'ХРОНИКИ', path: '/timeline' },
+    { name: 'ГАЛЕРЕЯ', path: '/gallery' },
+    { name: 'ЛОР', path: '/lore' },
   ];
 
   return (
     <div className="min-h-screen bg-darker text-light flex flex-col md:flex-row font-sans selection:bg-primary selection:text-white relative">
-      
+
       {/* Mobile Header */}
       <div className="md:hidden flex justify-between items-center p-6 border-b border-gray-dark sticky top-0 bg-darker z-50">
         <h1 className="font-display font-bold text-xl tracking-tighter text-primary">D&D CAMPAIGN</h1>
@@ -30,70 +29,63 @@ export default function Layout() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="fixed inset-0 top-[81px] bg-darker z-40 flex flex-col p-6 md:hidden border-b border-gray-dark"
           >
             {navLinks.map((link) => (
-              <Link 
+              <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setMenuOpen(false)}
-                className={`font-display text-2xl font-bold uppercase tracking-widest mb-6 transition-colors flex items-center gap-4 ${location.pathname === link.path ? 'text-primary' : 'text-light hover:text-gray-400'}`}
+                className={`font-mono text-2xl font-bold uppercase tracking-widest mb-6 transition-colors ${location.pathname === link.path ? 'text-primary' : 'text-light hover:text-gray-400'}`}
               >
-                {link.icon} {link.name}
+                {link.name}
               </Link>
             ))}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar (Expandable) */}
-      <motion.div 
-        className="hidden md:flex flex-col border-r border-gray-dark h-screen sticky top-0 shrink-0 py-8 bg-darker z-50 overflow-hidden"
-        initial={{ width: 88 }}
-        animate={{ width: isSidebarExpanded ? 240 : 88 }}
-        onMouseEnter={() => setIsSidebarExpanded(true)}
-        onMouseLeave={() => setIsSidebarExpanded(false)}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-      >
-        <div className="flex flex-col gap-12 w-full h-full">
-          {/* Title Area */}
-          <div className="flex items-center w-full px-6 whitespace-nowrap overflow-hidden min-h-[40px]">
-            <span className="font-display font-bold text-2xl tracking-widest text-primary truncate">
-              {isSidebarExpanded ? "D&D CAMPAIGN" : "D&D"}
-            </span>
-          </div>
-          
-          <nav className="flex flex-col gap-4 mt-4 w-full px-4 flex-1">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.path} 
+      {/* Desktop Sidebar — fixed, monospace, engraved vertical type. No hover-expand. */}
+      <div className="hidden md:flex flex-col w-[76px] shrink-0 h-screen sticky top-0 z-50 bg-gray-dark">
+
+        {/* Brand mark: single glyph, hard edge */}
+        <div className="flex items-center justify-center h-16 shrink-0 bg-primary">
+          <span className="font-mono font-bold text-black text-xl">D</span>
+        </div>
+
+        {/* Vertical nav — full-bleed rows, hard borders, no rounding, no easing */}
+        <nav className="flex-1 flex flex-col">
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <Link
+                key={link.path}
                 to={link.path}
-                className="flex items-center gap-6 px-4 py-4 rounded-lg transition-colors hover:bg-gray-dark/50 group whitespace-nowrap overflow-hidden"
+                className={`relative flex-1 flex items-center justify-center border-t border-black
+                  ${isActive ? 'bg-primary' : 'bg-gray-dark hover:bg-black'}`}
               >
-                <div className={`shrink-0 ${location.pathname === link.path ? 'text-primary' : 'text-gray-400 group-hover:text-primary'}`}>
-                  {link.icon}
-                </div>
-                <motion.span 
-                  animate={{ opacity: isSidebarExpanded ? 1 : 0 }}
-                  className={`font-display text-sm uppercase tracking-widest ${location.pathname === link.path ? 'text-primary font-bold' : 'text-gray-400 group-hover:text-primary'}`}
+                <span
+                  className={`writing-vertical-rl rotate-180 font-mono text-[15px] font-bold uppercase tracking-[0.35em] whitespace-nowrap
+                    ${isActive ? 'text-black' : 'text-gray-100'}`}
                 >
                   {link.name}
-                </motion.span>
+                </span>
               </Link>
-            ))}
-          </nav>
+            );
+          })}
+        </nav>
 
-          <div className="flex px-8 w-full shrink-0">
-            <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mx-auto">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-            </div>
-          </div>
+        {/* Footer strip: raw coordinates, studio-manifesto detail */}
+        <div className="flex items-center justify-center h-16 shrink-0 border-t border-black">
+          <span className="writing-vertical-rl rotate-180 font-mono text-[11px] tracking-[0.3em] text-gray-400">
+            №01
+          </span>
         </div>
-      </motion.div>
+      </div>
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-x-hidden relative min-h-screen">

@@ -44,7 +44,7 @@ export default function Home() {
             </Link>
             {/* Кнопка 2 - контурная (призрак) */}
             <Link to="/characters" className="px-8 py-4 border border-zinc-700 text-zinc-300 font-display font-bold uppercase tracking-widest text-sm hover:border-zinc-200 hover:text-white transition-colors">
-              Встретить Отряд
+              Отряд
             </Link>
           </div>
         </motion.div>
