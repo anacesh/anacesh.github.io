@@ -1,0 +1,6 @@
+{
+  "name": "D&D Campaign Hub",
+  "description": "A stylish, dark-themed static site for tracking D&D characters, timeline, and gallery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

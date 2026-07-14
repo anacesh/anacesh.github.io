@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600&family=Unbounded:wght@300;400;500;700;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Unbounded", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+  
+  --color-primary: #FF3333;
+  --color-dark: #050505;
+  --color-darker: #000000;
+  --color-light: #F5F5F5;
+  --color-gray-dark: #1A1A1A;
+  --color-gray-light: #333333;
+}
+
+@layer base {
+  body {
+    @apply bg-darker text-light font-sans antialiased overflow-x-hidden;
+  }
+  
+  ::selection {
+    @apply bg-primary text-white;
+  }
+}
+
+@layer utilities {
+  .writing-vertical-rl {
+    writing-mode: vertical-rl;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #000000; 
+}
+::-webkit-scrollbar-thumb {
+  background: #333333; 
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF3333; 
+}
